@@ -2,7 +2,7 @@
   "name": "lozad",
   "title": "lozad.js",
   "description": "A light-weight JS library to lazy load any HTML element such as images, ads, videos etc.",
-  "version": "1.16.0",
+  "version": "1.16.0-pictureFix",
   "homepage": "https://github.com/ApoorvSaxena/lozad.js",
   "license": "MIT",
   "scripts": {
@@ -22,7 +22,7 @@
     "email": "root@apoorv.pro",
     "url": "https://apoorv.pro"
   },
-  "browser": "dist/lozad.es.js",
+  "browser": "dist/lozad.min.js",
   "main": "dist/lozad.js",
   "module": "dist/lozad.es.js",
   "repository": {

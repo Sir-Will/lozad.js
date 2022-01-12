@@ -67,7 +67,9 @@ export default [
       }),
       uglify({
         output: {
-          comments: true
+          comments: function(node, comment) {
+              return /\! lozad.js|@preserve|@license|@cc_on/i.test(comment.value);
+          }
         }
       }),
       filesize()

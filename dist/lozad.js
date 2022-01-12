@@ -1,6 +1,6 @@
-/*! lozad.js - v1.16.0 - 2020-09-10
+/*! lozad.js - v1.16.0-pictureFix - 2022-01-12
 * https://github.com/ApoorvSaxena/lozad.js
-* Copyright (c) 2020 Apoorv Saxena; Licensed MIT */
+* Copyright (c) 2022 Apoorv Saxena; Licensed MIT */
 
 
 (function (global, factory) {
@@ -8,6 +8,8 @@
   typeof define === 'function' && define.amd ? define(factory) :
   (global.lozad = factory());
 }(this, (function () { 'use strict';
+
+  function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
 
   /**
    * Detect IE browser
@@ -33,24 +35,37 @@
     enableAutoReload: false,
     load: function load(element) {
       if (element.nodeName.toLowerCase() === 'picture') {
-        var img = element.querySelector('img');
-        var append = false;
+        var imgEl = element.querySelector('img');
+        if (imgEl === null) {
+          // Check to see if there isn't already an img tag
+          var img = document.createElement('img');
+          if (isIE && element.getAttribute('data-iesrc')) {
+            img.src = element.getAttribute('data-iesrc');
+          }
 
-        if (img === null) {
-          img = document.createElement('img');
-          append = true;
-        }
+          if (element.getAttribute('data-alt')) {
+            img.alt = element.getAttribute('data-alt');
+          }
 
-        if (isIE && element.getAttribute('data-iesrc')) {
-          img.src = element.getAttribute('data-iesrc');
-        }
+          element.appendChild(img);
+        } else {
+          // Gets an array of source elements
+          // Node list converted to array because some browsers don't support forEach on a node list
+          var sourceElements = [].concat(_toConsumableArray(element.querySelectorAll('source')));
+          // Loop thrrough them all
+          sourceElements.forEach(function (source) {
+            // If there is a data-srcset attribute, make it a srcset attribute
+            if (source.getAttribute('data-srcset')) {
+              source.setAttribute('srcset', source.getAttribute('data-srcset'));
+            }
+          });
+          if (imgEl.getAttribute('data-src')) {
+            imgEl.src = imgEl.getAttribute('data-src');
+          }
 
-        if (element.getAttribute('data-alt')) {
-          img.alt = element.getAttribute('data-alt');
-        }
-
-        if (append) {
-          element.append(img);
+          if (imgEl.getAttribute('data-srcset')) {
+            imgEl.setAttribute('srcset', imgEl.getAttribute('data-srcset'));
+          }
         }
       }
 
